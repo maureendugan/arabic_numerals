@@ -9,30 +9,24 @@ def arabic_numbers(rom_num)
     "M" => 1000
   }
 
-  exceptions = {
-    "IV" => 2,
-    "IX" => 2,
-    "XL" => 20,
-    "XC" => 20,
-    "CD" => 200,
-    "CM" => 200,
-  }
-  
-  correction = 0
-  exceptions.each do |combo, digit|
-    if rom_num.index(combo) != nil
-      correction = correction - digit
-    end
-  end
 
   result = 0
   rom_array = rom_num.split("")
+  rom_array = rom_array.reverse
+  previous_digit = 1
   rom_array.each do |rom_numeral|
     numerals.each do |letter, digit|
       if letter == rom_numeral
-        result = result + digit
+        if previous_digit <= digit
+          result = result + digit
+        else
+          result = result - digit
+        end
+        previous_digit = digit
       end
     end
   end
-  result + correction
+  result
 end
+
+puts arabic_numbers('II')
